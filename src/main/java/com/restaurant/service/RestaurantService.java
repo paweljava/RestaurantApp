@@ -21,4 +21,14 @@ public class RestaurantService {
     public Set<Restaurant> getRestaurants() {
         return restaurantRepository.getAllRestaurants();
     }
+
+    public Restaurant save(Restaurant restaurant) {
+        return restaurantRepository.add(restaurant);
+    }
+
+    public void delete(String name) {
+        restaurantRepository.delete(name);
+    }
+
+    
 }
