@@ -1,9 +1,5 @@
 package com.restaurant.model;
 
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +20,7 @@ public class Restaurant {
         this.type = type;
     }
 
-    public Restaurant(UUID restaurantId, String restaurantName, String restaurantAddress, RestaurantType type) {
+   /* public Restaurant(UUID restaurantId, String restaurantName, String restaurantAddress, RestaurantType type) {
         this.id = restaurantId;
         this.name = restaurantName;
         this.address = restaurantAddress;
@@ -37,7 +33,7 @@ public class Restaurant {
         this.address = restaurantAddress;
         this.type = type;
         this.mealList = mealList;
-    }
+    }*/
 
     public void setName(String name) {
         this.name = name;

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @Repository
 public class RestaurantRepository {
@@ -22,43 +21,47 @@ public class RestaurantRepository {
         this.restaurantsList = new HashSet<Restaurant>(List.of(new Restaurant("Ciastkarnia", "Warszawa", RestaurantType.POLISH)));
     }
 
-    // Create
+    //Create
     public Restaurant add(Restaurant restaurant) {
         restaurantsList.add(restaurant);
         return restaurant;
     }
 
-    // Read
+    //Read
     public Set<Restaurant> getAllRestaurants() {
         return restaurantsList;
     }
 
+    //Update
     public Restaurant updateRestaurantAddressByName(String restaurantName, String newRestaurantAddress) {
         for (final var restaurant : restaurantsList) {
             if (restaurant.getName().equals(restaurantName)) {
                 restaurant.setAddress(newRestaurantAddress);
-                System.out.println("Restaurant updated");
                 return restaurant;
             }
         }
         throw new IllegalStateException();
     }
 
-    // Delete
-    public void delete(String name) {
+    //Delete
+    public void deleteByName(String name) {
+        Restaurant nameToDelete = null;
         for (final var restaurant : restaurantsList) {
             if (restaurant.getName().equals(name)) {
-                restaurantsList.remove(restaurant);
-                System.out.println("Restaurant deleted");
+                nameToDelete = restaurant;
+                //restaurantsList.remove(restaurant);
+                //System.out.println("Restaurant deleted");
             }
         }
+        restaurantsList.remove(nameToDelete);
     }
+
 
     public boolean isRestaurantListEmpty() {
         return getAllRestaurants().isEmpty();
     }
 
-    public void updateRestaurantNameAndTypeById(UUID restaurantId, String name, RestaurantType type) {
+    /*public void updateRestaurantNameAndTypeById(UUID restaurantId, String name, RestaurantType type) {
         for (final var restaurant : getAllRestaurants()) {
             if (restaurant.getId().equals(restaurantId) && name != null && type != null) {
                 restaurant.setName(name);
@@ -68,5 +71,5 @@ public class RestaurantRepository {
             }
         }
         throw new IllegalStateException();
-    }
+    }*/
 }

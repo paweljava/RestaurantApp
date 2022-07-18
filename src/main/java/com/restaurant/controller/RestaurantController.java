@@ -19,27 +19,25 @@ public class RestaurantController {
     public RestaurantController(RestaurantService restaurantService, RestaurantRepository restaurantRepository) {
         this.restaurantService = restaurantService;
         this.restaurantRepository = restaurantRepository;
-
     }
 
-
-        @GetMapping
-        public Set<Restaurant> getRestaurants () {
-            return restaurantService.getRestaurants();
-        }
-
-        @PostMapping
-        public boolean addRestaurant (@RequestBody Restaurant restaurant){
-            return restaurantRepository.restaurantsList.add(restaurant);
-        }
-
-    /*@PatchMapping("{id}")
-    public Restaurant updateRestaurantAddressByName () setRestaurants() {
-        return restaurantService. ();
-    }*/
-
-        @DeleteMapping()
-        public void delete (@RequestParam String name) {
-            restaurantService.delete(name);
-        }
+    @GetMapping
+    public Set<Restaurant> getRestaurants() {
+        return restaurantService.getRestaurants();
     }
+
+    @PostMapping
+    public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
+        return restaurantService.save(restaurant);
+    }
+
+    @PatchMapping
+    public Restaurant updateRestaurantAddressByName(@RequestParam(name = "name") String name, @RequestBody String address) {
+        return restaurantService.editRestaurantAddressByName(name, address);
+    }
+
+    @DeleteMapping()
+    public void delete(@RequestParam String name) {
+        restaurantService.delete(name);
+    }
+}
