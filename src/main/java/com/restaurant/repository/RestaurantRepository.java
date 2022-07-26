@@ -2,6 +2,8 @@ package com.restaurant.repository;
 
 import com.restaurant.model.Restaurant;
 import com.restaurant.model.RestaurantType;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
@@ -12,9 +14,12 @@ import java.util.Set;
 public class RestaurantRepository {
 
     public final Set<Restaurant> restaurantsList;
+    public JdbcTemplate jdbcTemplate;
 
-    public RestaurantRepository(Set<Restaurant> restaurants) {
+
+    public RestaurantRepository(Set<Restaurant> restaurants, JdbcTemplate jdbcTemplate) {
         this.restaurantsList = restaurants;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public RestaurantRepository() {
@@ -28,8 +33,15 @@ public class RestaurantRepository {
     }
 
     //Read
+/*
     public Set<Restaurant> getAllRestaurants() {
         return restaurantsList;
+    }
+*/
+
+    public Set<Restaurant> getAllRestaurants() {
+        return (Set<Restaurant>) jdbcTemplate.query("SELECT id, name, address, type, meallist from restaurant",
+                BeanPropertyRowMapper.newInstance(Restaurant.class));
     }
 
     //Update
