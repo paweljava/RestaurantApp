@@ -5,6 +5,7 @@ import com.restaurant.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -21,8 +22,16 @@ public class RestaurantService {
         return restaurantRepository.add(restaurant);
     }
 
-    public Set<Restaurant> getRestaurants() {
+    public List<Restaurant> getAllRestaurants() {
         return restaurantRepository.getAllRestaurants();
+    }
+
+    public Restaurant getRestaurantByName(String name) {
+        return restaurantRepository.getRestaurantByName(name);
+    }
+
+    public Restaurant getRestaurantByAddress(String address) {
+        return restaurantRepository.getRestaurantByAddress(address);
     }
 
     public Restaurant editRestaurantAddressByName(String restaurantName, String newAddress) {

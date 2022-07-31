@@ -42,7 +42,7 @@ public class Restaurant {
         this.mealList = mealList;
     }*/
 
-    public void setName(String name) {
+    /*public void setName(String name) {
         this.name = name;
     }
 
@@ -68,7 +68,7 @@ public class Restaurant {
 
     public RestaurantType getType() {
         return type;
-    }
+    }*/
 
     //    @Override
     public String toString() {

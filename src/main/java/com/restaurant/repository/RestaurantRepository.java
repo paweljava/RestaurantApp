@@ -1,47 +1,65 @@
 package com.restaurant.repository;
 
 import com.restaurant.model.Restaurant;
-import com.restaurant.model.RestaurantType;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.UUID;
 
 @Repository
 public class RestaurantRepository {
 
-    public final Set<Restaurant> restaurantsList;
+    public final List<Restaurant> restaurantsList;
     public JdbcTemplate jdbcTemplate;
 
 
-    public RestaurantRepository(Set<Restaurant> restaurants, JdbcTemplate jdbcTemplate) {
+    public RestaurantRepository(List<Restaurant> restaurants, JdbcTemplate jdbcTemplate) {
         this.restaurantsList = restaurants;
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public RestaurantRepository() {
+    /*public RestaurantRepository() {
         this.restaurantsList = new HashSet<Restaurant>(List.of(new Restaurant("Ciastkarnia", "Warszawa", RestaurantType.POLISH)));
-    }
+    }*/
 
     //Create
     public Restaurant add(Restaurant restaurant) {
-        restaurantsList.add(restaurant);
+        jdbcTemplate.update("INSERT INTO restaurant(id, name, address, type) VALUES(?, ?, ?, ?)",
+                restaurant.getId(),
+                restaurant.getName(),
+                restaurant.getAddress(),
+                restaurant.getType().toString()
+        );
         return restaurant;
     }
 
-    //Read
-/*
-    public Set<Restaurant> getAllRestaurants() {
-        return restaurantsList;
-    }
-*/
+    /*public List<Restaurant> add(List<Restaurant> restaurants) {
+        restaurants.forEach(restaurant -> jdbcTemplate
+                .update("INSERT INTO restaurant(id, name, address, type) VALUES(?, ?, ?, ?)",
+                        restaurant.getId(),
+                        restaurant.getName(),
+                        restaurant.getAddress(),
+                        restaurant.getType()
+                ));
+        return restaurants;
+    }*/
 
-    public Set<Restaurant> getAllRestaurants() {
-        return (Set<Restaurant>) jdbcTemplate.query("SELECT id, name, address, type, meallist from restaurant",
+    //Read
+    public List<Restaurant> getAllRestaurants() {
+        return jdbcTemplate.query("SELECT id, name, address, type From restaurant",
                 BeanPropertyRowMapper.newInstance(Restaurant.class));
+    }
+
+    public Restaurant getRestaurantByName(String name) {
+        return jdbcTemplate.queryForObject("SELECT id, name, address, type From restaurant WHERE " +
+                "name = ?", BeanPropertyRowMapper.newInstance(Restaurant.class), name);
+    }
+
+    public Restaurant getRestaurantByAddress(String address) {
+        return jdbcTemplate.queryForObject("SELECT id, name, address, type From restaurant WHERE " +
+                "address = ?", BeanPropertyRowMapper.newInstance(Restaurant.class), address);
     }
 
     //Update
