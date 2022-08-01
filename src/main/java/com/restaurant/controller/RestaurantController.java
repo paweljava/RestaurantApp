@@ -51,15 +51,17 @@ public class RestaurantController {
         return restaurantService.save(restaurant);
     }
 
-    /*@PostMapping
-    public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
-        return restaurantService.save(restaurant);
-    }*/
+    @PatchMapping("/{name}")
+    public Restaurant updateRestaurantAddressByName(@PathVariable("name") String name, @RequestBody Restaurant updatedRestaurant) {
+        Restaurant restaurant = restaurantRepository.getRestaurantByName(name);
+        restaurant.setAddress(updatedRestaurant.getAddress());
+        return restaurantService.editRestaurantAddressByName(restaurant);
+    }
 
-    @PatchMapping
+    /*@PatchMapping
     public Restaurant updateRestaurantAddressByName(@RequestParam(name = "name") String name, @RequestBody String address) {
         return restaurantService.editRestaurantAddressByName(name, address);
-    }
+    }*/
 
     @DeleteMapping()
     public void delete(@RequestParam String name) {

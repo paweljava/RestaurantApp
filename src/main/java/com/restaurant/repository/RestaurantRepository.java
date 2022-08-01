@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
 public class RestaurantRepository {
@@ -53,25 +52,24 @@ public class RestaurantRepository {
     }
 
     public Restaurant getRestaurantByName(String name) {
-        return jdbcTemplate.queryForObject("SELECT id, name, address, type From restaurant WHERE " +
-                "name = ?", BeanPropertyRowMapper.newInstance(Restaurant.class), name);
+        return jdbcTemplate.queryForObject("SELECT id, name, address, type FROM restaurant WHERE " +
+                "name=?", BeanPropertyRowMapper.newInstance(Restaurant.class), name);
     }
 
     public Restaurant getRestaurantByAddress(String address) {
-        return jdbcTemplate.queryForObject("SELECT id, name, address, type From restaurant WHERE " +
-                "address = ?", BeanPropertyRowMapper.newInstance(Restaurant.class), address);
+        return jdbcTemplate.queryForObject("SELECT id, name, address, type FROM restaurant WHERE " +
+                "address=?", BeanPropertyRowMapper.newInstance(Restaurant.class), address);
     }
 
     //Update
-    public Restaurant updateRestaurantAddressByName(String restaurantName, String newRestaurantAddress) {
-        for (final var restaurant : restaurantsList) {
-            if (restaurant.getName().equals(restaurantName)) {
-                restaurant.setAddress(newRestaurantAddress);
-                return restaurant;
-            }
-        }
-        throw new IllegalStateException();
+    public Restaurant updateRestaurantAddressByName(Restaurant restaurant) {
+        jdbcTemplate.update("UPDATE restaurant SET address = ? WHERE name = ?",
+                restaurant.getAddress(),
+                restaurant.getName()
+        );
+        return restaurant;
     }
+
 
     //Delete
     public void deleteByName(String name) {
