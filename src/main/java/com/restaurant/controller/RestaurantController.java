@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -24,6 +25,11 @@ public class RestaurantController {
     @GetMapping
     public List<Restaurant> getRestaurants() {
         return restaurantService.getAllRestaurants();
+    }
+
+    @GetMapping("/id/{id}")
+    public Restaurant getRestaurantById(@PathVariable("id") UUID id) {
+        return restaurantService.getRestaurantById(id);
     }
 
     @GetMapping("/{name}")
@@ -53,9 +59,16 @@ public class RestaurantController {
 
     @PatchMapping("/{name}")
     public Restaurant updateRestaurantAddressByName(@PathVariable("name") String name, @RequestBody Restaurant updatedRestaurant) {
-        Restaurant restaurant = restaurantRepository.getRestaurantByName(name);
+        Restaurant restaurant = restaurantService.getRestaurantByName(name);
         restaurant.setAddress(updatedRestaurant.getAddress());
         return restaurantService.editRestaurantAddressByName(restaurant);
+    }
+
+    @PatchMapping("/id/{id}")
+    public Restaurant updateRestaurantAddressById(@PathVariable("id") UUID id, @RequestBody Restaurant updateRestaurant) {
+        Restaurant restaurant = restaurantService.getRestaurantById(id);
+        restaurant.setAddress(updateRestaurant.getAddress());
+        return restaurantService.editRestaurantAddressById(restaurant);
     }
 
     /*@PatchMapping
@@ -63,8 +76,8 @@ public class RestaurantController {
         return restaurantService.editRestaurantAddressByName(name, address);
     }*/
 
-    @DeleteMapping()
-    public void delete(@RequestParam String name) {
+    @DeleteMapping("{name}")
+    public void delete(@PathVariable("name") String name) {
         restaurantService.delete(name);
     }
 }

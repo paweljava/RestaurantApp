@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class RestaurantRepository {
@@ -51,6 +52,11 @@ public class RestaurantRepository {
                 BeanPropertyRowMapper.newInstance(Restaurant.class));
     }
 
+    public Restaurant getRestaurantById(UUID id) {
+        return jdbcTemplate.queryForObject("SELECT id, name, address, type FROM restaurant WHERE " +
+                "id=?", BeanPropertyRowMapper.newInstance(Restaurant.class), id);
+    }
+
     public Restaurant getRestaurantByName(String name) {
         return jdbcTemplate.queryForObject("SELECT id, name, address, type FROM restaurant WHERE " +
                 "name=?", BeanPropertyRowMapper.newInstance(Restaurant.class), name);
@@ -70,24 +76,25 @@ public class RestaurantRepository {
         return restaurant;
     }
 
+    public Restaurant updateRestaurantAddressById(Restaurant restaurant) {
+        jdbcTemplate.update("UPDATE restaurant SET address = ? WHERE id = ?",
+                restaurant.getAddress(),
+                restaurant.getId()
+        );
+        return restaurant;
+    }
 
     //Delete
-    public void deleteByName(String name) {
-        Restaurant nameToDelete = null;
-        for (final var restaurant : restaurantsList) {
-            if (restaurant.getName().equals(name)) {
-                nameToDelete = restaurant;
-                //restaurantsList.remove(restaurant);
-                //System.out.println("Restaurant deleted");
-            }
-        }
-        restaurantsList.remove(nameToDelete);
+    public int deleteByName(String name) {
+        jdbcTemplate.update("DELETE FROM restaurant WHERE name = ?", name);
+        return 1;
     }
 
 
     public boolean isRestaurantListEmpty() {
         return getAllRestaurants().isEmpty();
     }
+
 
     /*public void updateRestaurantNameAndTypeById(UUID restaurantId, String name, RestaurantType type) {
         for (final var restaurant : getAllRestaurants()) {
