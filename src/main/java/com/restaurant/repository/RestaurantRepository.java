@@ -1,6 +1,7 @@
 package com.restaurant.repository;
 
 import com.restaurant.model.Restaurant;
+import com.restaurant.model.RestaurantDTO;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -48,9 +49,29 @@ public class RestaurantRepository {
 
     //Read
     public List<Restaurant> getAllRestaurants() {
-        return jdbcTemplate.query("SELECT id, name, address, type From restaurant",
+        return jdbcTemplate.query(("SELECT r.id, r.name, r.address, rt.name AS type \n" +
+                        "FROM restaurant r \n" +
+                        "JOIN restaurant_type_to_restaurant rttr ON r.id = rttr.restaurant_id  \n" +
+                        "JOIN restaurant_type rt ON rttr.restaurant_type_id = rt.id \n" +
+                        "WHERE r.name = 'Kawiarnia' \n"),
                 BeanPropertyRowMapper.newInstance(Restaurant.class));
     }
+
+    public List<Restaurant> getAllRestaurantsAndMeals() {
+        return jdbcTemplate.query(("SELECT r.id, r.name, r.address, rt.name AS type, add value in(m.name, m.price) as meallist \n" +
+                        "FROM restaurant r \n" +
+                        "JOIN restaurant_type_to_restaurant rttr ON r.id = rttr.restaurant_id  \n" +
+                        "JOIN restaurant_type rt ON rttr.restaurant_type_id = rt.id \n" +
+                        "JOIN meal_to_restaurant mtr ON r.id = mtr.restaurant_id \n" +
+                        "JOIN meal m ON mtr.meal_id = m.id \n" +
+                        "WHERE r.name = 'Pierogarnia' \n"),
+                BeanPropertyRowMapper.newInstance(Restaurant.class));
+    }
+    //wersja poprzednia
+    /*public List<Restaurant> getAllRestaurants() {
+        return jdbcTemplate.query(("SELECT id, name, address FROM restaurant"),
+                BeanPropertyRowMapper.newInstance(Restaurant.class));
+    }*/
 
     public Restaurant getRestaurantById(UUID id) {
         return jdbcTemplate.queryForObject("SELECT id, name, address, type FROM restaurant WHERE " +
@@ -90,11 +111,20 @@ public class RestaurantRepository {
         return 1;
     }
 
+    /*public Meal addMealByRestaurantName() {
+        jdbcTemplate.update("INSERT INTO meal(id, name, price) VALUES(?, ?, ?)",
+                .getId(),
+                restaurant.getName(),
+                restaurant.getAddress(),
+                restaurant.getType().toString()
+        );
+        return restaurant;
+    }*/
+
 
     public boolean isRestaurantListEmpty() {
         return getAllRestaurants().isEmpty();
     }
-
 
     /*public void updateRestaurantNameAndTypeById(UUID restaurantId, String name, RestaurantType type) {
         for (final var restaurant : getAllRestaurants()) {

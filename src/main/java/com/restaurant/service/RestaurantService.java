@@ -1,6 +1,7 @@
 package com.restaurant.service;
 
 import com.restaurant.model.Restaurant;
+import com.restaurant.model.RestaurantDTO;
 import com.restaurant.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,22 @@ public class RestaurantService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public Restaurant save(Restaurant restaurant) {
+    public Restaurant save(RestaurantDTO restaurantDTO) {
+        final var restaurant = new Restaurant(
+                restaurantDTO.getName(),
+                restaurantDTO.getAddress(),
+                restaurantDTO.getType()
+        );
         return restaurantRepository.add(restaurant);
     }
 
     public List<Restaurant> getAllRestaurants() {
         return restaurantRepository.getAllRestaurants();
+    }
+
+    public List<Restaurant> getAllRestaurantsAndMeals() {
+
+        return restaurantRepository.getAllRestaurantsAndMeals();
     }
 
     public Restaurant getRestaurantByName(String name) {
@@ -49,4 +60,8 @@ public class RestaurantService {
     public Restaurant getRestaurantById(UUID id) {
         return restaurantRepository.getRestaurantById(id);
     }
+
+    /*public Restaurant addMealByRestaurantName(Restaurant restaurant) {
+        return restaurantRepository.addMealByRestaurantName();
+    }*/
 }

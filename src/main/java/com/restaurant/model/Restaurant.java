@@ -16,16 +16,22 @@ public class Restaurant {
     private UUID id;
     private String name;
     private String address;
-    private RestaurantType type;
+    private String type;
     private List<Meal> mealList = new ArrayList<>();
 
-
-    public Restaurant(String restaurantName, String restaurantAddress, RestaurantType type) {
+    public Restaurant(String restaurantName, String restaurantAddress, String type) {
         this.id = UUID.randomUUID();
         this.name = restaurantName;
         this.address = restaurantAddress;
         this.type = type;
     }
+
+    /*public Restaurant(String restaurantName, String restaurantAddress, RestaurantType type) {
+        this.id = UUID.randomUUID();
+        this.name = restaurantName;
+        this.address = restaurantAddress;
+        this.type = type;
+    }*/
 
    /* public Restaurant(UUID restaurantId, String restaurantName, String restaurantAddress, RestaurantType type) {
         this.id = restaurantId;

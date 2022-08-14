@@ -1,6 +1,8 @@
 package com.restaurant.controller;
 
+import com.restaurant.model.Meal;
 import com.restaurant.model.Restaurant;
+import com.restaurant.model.RestaurantDTO;
 import com.restaurant.repository.RestaurantRepository;
 import com.restaurant.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,14 @@ public class RestaurantController {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @GetMapping
+    /*@GetMapping
     public List<Restaurant> getRestaurants() {
         return restaurantService.getAllRestaurants();
+    }*/
+
+    @GetMapping
+    public List<Restaurant> getRestaurantsAndMeals() {
+        return restaurantService.getAllRestaurantsAndMeals();
     }
 
     @GetMapping("/id/{id}")
@@ -53,8 +60,8 @@ public class RestaurantController {
     }*/
 
     @PostMapping
-    public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
-        return restaurantService.save(restaurant);
+    public Restaurant addRestaurant(@RequestBody RestaurantDTO restaurantDto) {
+        return restaurantService.save(restaurantDto);
     }
 
     @PatchMapping("/{name}")
@@ -63,6 +70,13 @@ public class RestaurantController {
         restaurant.setAddress(updatedRestaurant.getAddress());
         return restaurantService.editRestaurantAddressByName(restaurant);
     }
+
+    /*@PatchMapping("/{name}")
+    public Restaurant addMealByRestaurantName(@PathVariable("name") String name, @RequestBody Meal meal) {
+        Restaurant restaurant = restaurantService.getRestaurantByName(name);
+        restaurant.getMealList().add(meal);
+        return restaurantService.addMealByRestaurantName(restaurant);
+    }*/
 
     @PatchMapping("/id/{id}")
     public Restaurant updateRestaurantAddressById(@PathVariable("id") UUID id, @RequestBody Restaurant updateRestaurant) {
