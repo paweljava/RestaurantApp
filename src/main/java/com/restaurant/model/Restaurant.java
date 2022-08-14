@@ -4,21 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Restaurant {
-
+    @Id
+    @GeneratedValue(generator = "UUID")
     private UUID id;
     private String name;
     private String address;
+    @Enumerated(EnumType.STRING)
     private RestaurantType type;
-    private List<Meal> mealList = new ArrayList<>();
-
+    //private List<Meal> mealList = new ArrayList<>();
 
     public Restaurant(String restaurantName, String restaurantAddress, RestaurantType type) {
         this.id = UUID.randomUUID();
@@ -80,12 +83,12 @@ public class Restaurant {
                 '}';
     }
 
-    public List<Meal> getMealList() {
+    /*public List<Meal> getMealList() {
         return mealList;
     }
 
     public void setMealList(List<Meal> mealList) {
         this.mealList = mealList;
-    }
+    }*/
 }
 

@@ -1,6 +1,10 @@
 package com.restaurant.service;
 
+import com.restaurant.model.Meal;
+import com.restaurant.model.MealDTO;
 import com.restaurant.model.Restaurant;
+import com.restaurant.model.RestaurantDTO;
+import com.restaurant.repository.MealRepository;
 import com.restaurant.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,28 +16,43 @@ import java.util.UUID;
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final MealRepository mealRepository;
 
     @Autowired
-    public RestaurantService(RestaurantRepository restaurantRepository) {
+    public RestaurantService(RestaurantRepository restaurantRepository, MealRepository mealRepository) {
         this.restaurantRepository = restaurantRepository;
+        this.mealRepository = mealRepository;
     }
 
-    public Restaurant save(Restaurant restaurant) {
-        return restaurantRepository.add(restaurant);
+    public Restaurant save(RestaurantDTO restaurantDTO) {
+        final var restaurant = new Restaurant(
+                restaurantDTO.getName(),
+                restaurantDTO.getAddress(),
+                restaurantDTO.getType()
+        );
+        return restaurantRepository.save(restaurant);
+    }
+
+    public Meal saveMeal(MealDTO mealDTO) {
+        final var meal = new Meal(mealDTO.getName(), mealDTO.getPrice());
+        return mealRepository.save(meal);
     }
 
     public List<Restaurant> getAllRestaurants() {
-        return restaurantRepository.getAllRestaurants();
+        return restaurantRepository.findAll();
     }
 
     public Restaurant getRestaurantByName(String name) {
-        return restaurantRepository.getRestaurantByName(name);
+        return restaurantRepository.findByName(name);
     }
 
+    public Restaurant getRestaurantById(UUID id) {
+        return restaurantRepository.findAllById(id);
+    }
     public Restaurant getRestaurantByAddress(String address) {
         return restaurantRepository.getRestaurantByAddress(address);
     }
-
+/*
     public Restaurant editRestaurantAddressByName(Restaurant restaurant) {
         return restaurantRepository.updateRestaurantAddressByName(restaurant);
     }
@@ -46,7 +65,8 @@ public class RestaurantService {
         restaurantRepository.deleteByName(name);
     }
 
-    public Restaurant getRestaurantById(UUID id) {
-        return restaurantRepository.getRestaurantById(id);
-    }
+*/
+    /*public Restaurant addMealByRestaurantName(Restaurant restaurant) {
+        return restaurantRepository.addMealByRestaurantName();
+    }*/
 }
