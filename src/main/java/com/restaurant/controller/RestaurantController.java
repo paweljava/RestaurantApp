@@ -46,10 +46,9 @@ public class RestaurantController {
         return restaurantService.addRestaurant(restaurantDto);
     }
 
-    //@PutMapping
-    @PutMapping("/")
-    public Restaurant updateRestaurantAddressByNamePut(@RequestBody Restaurant restaurant) {
-        return restaurantService.editRestaurantAddressById(restaurant);
+    @PutMapping
+    public Restaurant updateRestaurantAddressById(@RequestBody Restaurant restaurant) {
+        return restaurantService.editRestaurantById(restaurant);
     }
 
     @DeleteMapping("/{id}")

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -81,13 +80,13 @@ public class RestaurantService {
         return restaurantRepository.save(restaurant);
     }
 
-    @Transactional
-    public Restaurant editRestaurantAddressById(Restaurant restaurant) {
+    //@Transactional
+    public Restaurant editRestaurantById(Restaurant restaurant) {
         var restaurantEdited = restaurantRepository.findById(restaurant.getId()).orElseThrow();
         restaurantEdited.setName(restaurant.getName());
         restaurantEdited.setAddress(restaurant.getAddress());
         restaurantEdited.setType(restaurant.getType());
-        return restaurantEdited;
+        return restaurantRepository.save(restaurantEdited);
     }
 
     public void deleteRestaurant(UUID id) {
