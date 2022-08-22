@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.7.1'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.7.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
 group = 'com.restaurant'
@@ -9,20 +9,43 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '16'
 
 repositories {
-	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
+    mavenCentral()
+    //maven { url 'https://repo.spring.io/milestone' }
 }
 
 dependencies {
-	implementation 'org.postgresql:postgresql:9.4.1211'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'org.postgresql:postgresql'
-	annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.postgresql:postgresql:42.3.6'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.2'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.7.3'
+
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    runtimeOnly 'org.postgresql:postgresql:42.3.6'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.2'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
+}
+
+task generateRestaurantsAndMeals() {
+    doLast {
+        File dataSql = file("src/main/resources/data.sql")
+        dataSql.write("delete from public.meal\n" +
+                "delete from public.restaurant")
+        //restaurants
+        //Random random = new Random();
+        /*for (int i = 1; i<=100; i++) {
+            dataSql.append("insert into restaurant(id, name, address, type) " +
+            "values ('${UUID.randomUUID()}', 'Restauracja${i}', 'Opole ${i}', 'ASIAN')\n")
+        }
+        //meals
+        for (int i = 1; i<=20; i++) {
+            dataSql.append("insert into meal(id, restaurant_id, name, price) " +
+                    "values ('${UUID.randomUUID()}', 'Restauracja${i}', 'Kotlet ${i}', 11)\n")
+        }*/
+    }
 }

@@ -13,40 +13,21 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Meal {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
+    private UUID restaurantId;
     private String name;
     private float price;
 
     public Meal(String name, float price) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    @Override // po co jest to nadpisywanie ?
+    @Override
     public String toString() {
         return "Meal{" +
                 "mealId=" + id +

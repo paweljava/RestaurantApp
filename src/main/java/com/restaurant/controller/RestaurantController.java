@@ -1,11 +1,11 @@
 package com.restaurant.controller;
 
-import com.restaurant.model.Meal;
-import com.restaurant.model.MealDTO;
 import com.restaurant.model.Restaurant;
-import com.restaurant.model.RestaurantDTO;
+import com.restaurant.model.RestaurantDto;
+import com.restaurant.model.RestaurantDtoMapper;
 import com.restaurant.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,19 +23,62 @@ public class RestaurantController {
     }
 
     @GetMapping
-    public List<Restaurant> getRestaurants() {
-        return restaurantService.getAllRestaurants();
+    public List<RestaurantDto> getRestaurants(@RequestParam(required = false) Integer page, Sort.Direction sort) {
+        int pageNumber = page != null && page > 0 ? page : 1;
+        Sort.Direction sortDirection = sort != null ? sort : Sort.Direction.ASC;
+        return RestaurantDtoMapper.mapToRestaurantDtos(restaurantService.getRestaurants(pageNumber - 1, sortDirection));
     }
 
-   @GetMapping("/id/{id}")
-    public Restaurant getRestaurantById(@PathVariable("id") UUID id) {
+    @GetMapping("/meals")
+    public List<Restaurant> getRestaurantsWithMeals(@RequestParam(required = false) Integer page, Sort.Direction sort) {
+        int pageNumber = page != null && page > 0 ? page : 1;
+        Sort.Direction sortDirection = sort != null ? sort : Sort.Direction.ASC;
+        return restaurantService.getRestaurantsWithMeals(pageNumber - 1, sortDirection);
+    }
+
+    @GetMapping("/{id}")
+    public Restaurant getSingleRestaurantById(@PathVariable("id") UUID id) {
         return restaurantService.getRestaurantById(id);
     }
 
-    @GetMapping("/{name}")
-    public Restaurant getRestaurantByName(@PathVariable("name") String name) {
-        return restaurantService.getRestaurantByName(name);
+    @PostMapping
+    public Restaurant addRestaurant(@RequestBody RestaurantDto restaurantDto) {
+        return restaurantService.addRestaurant(restaurantDto);
     }
+
+    //@PutMapping
+    @PutMapping("/")
+    public Restaurant updateRestaurantAddressByNamePut(@RequestBody Restaurant restaurant) {
+        return restaurantService.editRestaurantAddressById(restaurant);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteRestaurant(@PathVariable("id") UUID id) {
+        restaurantService.deleteRestaurant(id);
+    }
+
+    /*
+    @PostMapping("/{name}")
+    public Meal addMeal(@PathVariable("name") @RequestBody MealDto mealDTO) {
+        return restaurantService.saveMeal(mealDTO);
+    }*/
+
+    /*@GetMapping("/{name}")
+    public Restaurant getRestaurantByName(@RequestParam("name") String name) {
+        return restaurantService.getRestaurantByName(name);
+    }*/
+    //@PatchMapping
+    /*@PatchMapping("/{name}")
+    public Restaurant updateRestaurantAddressByNamePatch(@PathVariable("name") String name, @RequestBody Restaurant restaurant) {
+        return restaurantService.editRestaurantAddressByNamePatch(name, restaurant);
+    }
+
+    //@PutMapping
+    @PutMapping("/{name}")
+    public Restaurant updateRestaurantAddressByNamePut(@PathVariable("name") String name, @RequestBody Restaurant restaurant) {
+        return restaurantService.editRestaurantAddressByNamePut(name, restaurant);
+    }*/
+
 
     /*@GetMapping
     public Restaurant getRestaurantByName2(@RequestParam(name = "name") String name) {
@@ -51,16 +94,6 @@ public class RestaurantController {
     public Restaurant getRestaurantByAddress2(@RequestParam(address = "address") String address) {
         return restaurantService.getRestaurantByAddress(address);
     }*/
-
-    @PostMapping
-    public Restaurant addRestaurant(@RequestBody RestaurantDTO restaurantDto) {
-        return restaurantService.save(restaurantDto);
-    }
-
-    @PostMapping("/{name}")
-    public Meal addMeal(@PathVariable ("name") @RequestBody MealDTO mealDTO) {
-        return restaurantService.saveMeal(mealDTO);
-    }
 
     /*@PatchMapping("/{name}")
     public Restaurant updateRestaurantAddressByName(@PathVariable("name") String name, @RequestBody Restaurant updatedRestaurant) {

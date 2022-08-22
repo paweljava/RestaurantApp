@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestaurantDTO {
+public class MealDto {
 
     private String name;
-    private String address;
-    private RestaurantType type;
+    private float price;
 }
+
