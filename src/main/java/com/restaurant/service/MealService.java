@@ -1,7 +1,9 @@
 package com.restaurant.service;
 
 import com.restaurant.model.Meal;
+import com.restaurant.model.CreateMealDto;
 import com.restaurant.model.MealDto;
+import com.restaurant.model.MealDtoMapper;
 import com.restaurant.repository.MealRepository;
 import com.restaurant.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,10 @@ public class MealService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public Meal addMealToRestaurant(UUID id, MealDto mealDto) {
-        restaurantRepository.findById(id).orElseThrow();
-        final var newMeal = new Meal(id, mealDto.getName(), mealDto.getPrice());
-        return mealRepository.save(newMeal);
+    public MealDto addMealToRestaurant(UUID idRestaurant, CreateMealDto createMealDto) {
+        restaurantRepository.findById(idRestaurant).orElseThrow();
+        var newMeal = new Meal(idRestaurant, createMealDto.getName(), createMealDto.getPrice());
+        var savedMeal = mealRepository.save(newMeal);
+        return MealDtoMapper.mapToMealDto(savedMeal);
     }
 }

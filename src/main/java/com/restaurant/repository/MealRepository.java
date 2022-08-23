@@ -10,5 +10,7 @@ import java.util.UUID;
 @Repository
 public interface MealRepository extends JpaRepository<Meal, UUID> {
 
-    List<Meal> findAllByRestaurantIdIn(List<UUID> uuids);
+    List<Meal> findAllByRestaurantIdIn(List<UUID> uuid);
+
+    Meal findAllByRestaurantId(UUID id);
 }

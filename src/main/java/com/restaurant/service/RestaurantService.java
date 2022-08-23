@@ -45,13 +45,21 @@ public class RestaurantService {
         return restaurantRepository.findAllRestaurant(PageRequest.of(page, PageSIZE, Sort.by(sort, "name")));
     }
 
-    /*public Restaurant getRestaurantByName(String name) {
-        return restaurantRepository.findByName(name);
-    }*/
-
     public Restaurant getRestaurantById(UUID id) {
         return restaurantRepository.findById(id)
                 .orElseThrow();
+    }
+
+    public Restaurant getRestaurantsWithMeals(UUID restaurantId, int page, Sort.Direction sort) {
+        var restaurant = restaurantRepository.findById(restaurantId).orElseThrow();//, PageRequest.of(page, PageSIZE,
+             //   Sort.by(sort, "name")));
+        /*List<UUID> uuids = restaurant.stream()
+                .map(restaurant -> restaurant.getId())
+                .collect(Collectors.toList());*/
+        var meals = mealRepository.findAllByRestaurantId(restaurantId);
+        //restaurant.setMeals(meals);
+        // abc = restaurant.setMeals(meals);//.getMeals(restaurant. -> restaurant.setMeals).add().;//.add()forEach(restaurant -> restaurant.setMeals(extractMeals(meals, restaurant.getId())));
+        return restaurant;
     }
 
     public List<Restaurant> getRestaurantsWithMeals(int page, Sort.Direction sort) {
@@ -81,12 +89,12 @@ public class RestaurantService {
     }
 
     //@Transactional
-    public Restaurant editRestaurantById(Restaurant restaurant) {
-        var restaurantEdited = restaurantRepository.findById(restaurant.getId()).orElseThrow();
-        restaurantEdited.setName(restaurant.getName());
-        restaurantEdited.setAddress(restaurant.getAddress());
-        restaurantEdited.setType(restaurant.getType());
-        return restaurantRepository.save(restaurantEdited);
+    public Restaurant updateRestaurantById(RestaurantDto restaurantDto) {
+        var restaurant = restaurantRepository.findById(restaurantDto.getId()).orElseThrow();
+        restaurant.setName(restaurantDto.getName());
+        restaurant.setAddress(restaurantDto.getAddress());
+        restaurant.setType(restaurantDto.getType());
+        return restaurantRepository.save(restaurant);
     }
 
     public void deleteRestaurant(UUID id) {
@@ -99,12 +107,12 @@ public class RestaurantService {
         return restaurantRepository.getRestaurantByAddress(address);
     }*/
 
-    /*public Restaurant editRestaurantAddressByNamePatch(String name, Restaurant restaurant) {
-        final var restaurantEdited = restaurantRepository.findByName(name);
-        restaurantEdited.setAddress(restaurant.getAddress());
+    public Restaurant updateRestaurantAddressByName(String restaurantName, String newAddress) {
+        final var restaurantEdited = restaurantRepository.findByName(restaurantName);
+        restaurantEdited.setAddress(newAddress);
         return restaurantRepository.save(restaurantEdited);
     }
-
+/*
     public Restaurant editRestaurantAddressByNamePut(String name, Restaurant restaurant) {
         var restaurantEdited = restaurantRepository.findByName(name);
         restaurantEdited.setName(restaurant.getName());
