@@ -1,8 +1,6 @@
 package com.restaurant.controller;
 
-import com.restaurant.model.Restaurant;
-import com.restaurant.model.RestaurantDto;
-import com.restaurant.model.RestaurantDtoMapper;
+import com.restaurant.model.*;
 import com.restaurant.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -50,6 +48,8 @@ public class RestaurantController {
     public Restaurant updateRestaurantAddressById(@RequestBody Restaurant restaurant) {
         return restaurantService.editRestaurantById(restaurant);
     }
+
+
 
     @DeleteMapping("/{id}")
     public void deleteRestaurant(@PathVariable("id") UUID id) {

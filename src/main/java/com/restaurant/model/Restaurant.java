@@ -5,9 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @Entity
@@ -32,6 +30,15 @@ public class Restaurant {
         this.address = restaurantAddress;
         this.type = type;
     }
+
+    public Restaurant(String name, String address, RestaurantType type, List<Meal> meals) {
+        this.name = name;
+        this.address = address;
+        this.type = type;
+        this.meals = meals;
+    }
+
+
     //@JoinColumn(name = "id")
 
     @Override

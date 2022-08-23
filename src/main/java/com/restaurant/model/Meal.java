@@ -21,8 +21,9 @@ public class Meal {
     private String name;
     private float price;
 
-    public Meal(String name, float price) {
+    public Meal(UUID restaurantId, String name, float price) {
         this.id = UUID.randomUUID();
+        this.restaurantId = restaurantId;
         this.name = name;
         this.price = price;
     }
